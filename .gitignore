@@ -1,0 +1,61 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Remotion / video render output
+out/
+.remotion/
+*.mp4
+*.webm
+*.mov
+benchmark.json
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Terraform (when infra/ is added)
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/launch.json
+!.vscode/*.code-snippets
+
+# Test / coverage
+coverage/
+.nyc_output/
+
+# Bun
+.bun/
+
+# Misc
+*.local
+.cache/

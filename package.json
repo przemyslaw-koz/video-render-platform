@@ -1,0 +1,13 @@
+{
+  "name": "video-render-platform",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "bun --cwd apps/orchestrator --watch src/index.ts",
+    "build": "bun --cwd apps/orchestrator run build",
+    "start": "bun --cwd apps/orchestrator run start"
+  }
+}
