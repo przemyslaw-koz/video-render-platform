@@ -1,17 +1,17 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-interface StorageAdapter {
-  saveInput(jobId: string, file: File): Promise<string>;
+export interface StorageAdapter {
+  saveInput(jobId: string, content: string | Buffer): Promise<string>;
   getInputPath(jobId: string): Promise<string>;
 }
 
 const inputsRoot = 'inputs';
 
 export class S3StorageAdapter implements StorageAdapter {
-  async saveInput(jobId: string, file: File): Promise<string> {
+  async saveInput(jobId: string, content: string | Buffer): Promise<string> {
     void jobId;
-    void file;
+    void content;
     throw new Error('Not implemented');
   }
 
@@ -22,10 +22,10 @@ export class S3StorageAdapter implements StorageAdapter {
 }
 
 export class LocalStorageAdapter implements StorageAdapter {
-  async saveInput(jobId: string, file: File): Promise<string> {
+  async saveInput(jobId: string, content: string | Buffer): Promise<string> {
     const path = join(inputsRoot, jobId, 'input.json');
     await mkdir(join(inputsRoot, jobId), { recursive: true });
-    await writeFile(path, Buffer.from(await file.arrayBuffer()));
+    await writeFile(path, content);
     return path;
   }
 

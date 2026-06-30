@@ -26,3 +26,11 @@ lerna-debug.log*
 
 # misc
 .DS_Store
+
+# local Bruno / manual API fixtures (not committed yet)
+test-data/
+
+# local render job artifacts
+inputs/
+outputs/
+jobs/
