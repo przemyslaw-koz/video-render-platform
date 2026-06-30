@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 
 export type JobStatus =
     | 'QUEUED'
@@ -71,8 +71,9 @@ export class LocalJobStoreAdapter implements JobStoreAdapter {
         return fullJob;
     }
     async getJob(jobId: string): Promise<Job | null> {
-        void jobId;
-        throw new Error('Not implemented');
+        const path = join(jobsRoot, `${jobId}.json`);
+        const content = await readFile(path, 'utf8');
+        return JSON.parse(content) as Job;
     }
     async updateJob(job: Job): Promise<void> {
         void job;
