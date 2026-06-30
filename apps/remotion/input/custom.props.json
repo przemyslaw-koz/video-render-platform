@@ -1,0 +1,77 @@
+{
+  "config": {
+    "title": "Top Programming Languages",
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "durationInFrames": 600,
+    "startYear": 2018,
+    "endYear": 2022,
+    "data": [
+      {"year": 2018, "name": "JavaScript", "value": 68},
+      {"year": 2018, "name": "Python", "value": 52},
+      {"year": 2018, "name": "Java", "value": 61},
+      {"year": 2018, "name": "TypeScript", "value": 28},
+      {"year": 2018, "name": "Go", "value": 18},
+      {"year": 2019, "name": "JavaScript", "value": 70},
+      {"year": 2019, "name": "Python", "value": 58},
+      {"year": 2019, "name": "Java", "value": 57},
+      {"year": 2019, "name": "TypeScript", "value": 35},
+      {"year": 2019, "name": "Go", "value": 23},
+      {"year": 2020, "name": "JavaScript", "value": 71},
+      {"year": 2020, "name": "Python", "value": 66},
+      {"year": 2020, "name": "Java", "value": 53},
+      {"year": 2020, "name": "TypeScript", "value": 45},
+      {"year": 2020, "name": "Go", "value": 30},
+      {"year": 2021, "name": "JavaScript", "value": 69},
+      {"year": 2021, "name": "Python", "value": 72},
+      {"year": 2021, "name": "Java", "value": 49},
+      {"year": 2021, "name": "TypeScript", "value": 55},
+      {"year": 2021, "name": "Go", "value": 37},
+      {"year": 2022, "name": "JavaScript", "value": 67},
+      {"year": 2022, "name": "Python", "value": 78},
+      {"year": 2022, "name": "Java", "value": 44},
+      {"year": 2022, "name": "TypeScript", "value": 63},
+      {"year": 2022, "name": "Go", "value": 42}
+    ],
+    "theme": {
+      "background": "#111111",
+      "titleColor": "#FFFFFF",
+      "labelColor": "#FFFFFF",
+      "barColors": {
+        "JavaScript": "#F7DF1E",
+        "Python": "#4B8BBE",
+        "Java": "#E76F00",
+        "TypeScript": "#3178C6",
+        "Go": "#00ADD8"
+      },
+      "fallbackBarColor": "#CCCCCC"
+    },
+    "fonts": {
+      "title": {
+        "source": "google",
+        "family": "Montserrat",
+        "weights": ["600", "700"]
+      },
+      "label": {
+        "source": "google",
+        "family": "Roboto",
+        "weights": ["400", "500"]
+      }
+    },
+    "assets": {
+      "JavaScript": {"src": "icons/javascript.svg"},
+      "Python": {"src": "icons/python.svg"},
+      "Java": {"src": "icons/java.svg"},
+      "TypeScript": {"src": "icons/typescript.svg"},
+      "Go": {"src": "icons/go.svg"}
+    },
+    "toasts": [
+      {
+        "at": {"year": 2020.6},
+        "message": "Python overtakes JavaScript — after years of JS dominance at the top.",
+        "ttlSeconds": 8
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+services:
+  render:
+    build: .
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./out:/app/out
+    environment:
+      COMPOSITION_ID: BarChartRace

@@ -1,0 +1,7 @@
+node_modules
+out
+.git
+.gitignore
+README.md
+eslint.config.mjs
+.prettierrc
