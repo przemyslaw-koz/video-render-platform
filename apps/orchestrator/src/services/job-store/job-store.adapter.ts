@@ -73,10 +73,12 @@ export class LocalJobStoreAdapter implements JobStoreAdapter {
     async getJob(jobId: string): Promise<Job | null> {
         const path = join(jobsRoot, `${jobId}.json`);
 
-        const exists = await access(path).catch(() => false);
-        if (!exists) {
+        try {
+            await access(path)
+        } catch {
             return null;
         }
+
         const content = await readFile(path, 'utf8');   
 
         return JSON.parse(content) as Job;
