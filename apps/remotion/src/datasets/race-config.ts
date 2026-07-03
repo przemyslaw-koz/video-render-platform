@@ -50,6 +50,7 @@ export const raceConfig: RaceConfig = {
       ttlSeconds: 8,
     },
   ],
+  barScaleMode: 'expanding-axis',
 };
 
 export const defaultBarChartRaceInputProps = {

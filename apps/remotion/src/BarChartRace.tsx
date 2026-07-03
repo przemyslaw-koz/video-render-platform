@@ -20,8 +20,7 @@ export const barChartRaceCalculateMetadata: CalculateMetadataFunction<
 export const BarChartRace: React.FC<BarChartRaceProps> = ({config}) => {
   const frame = useCurrentFrame();
   const {layoutTimeline, fonts, toasts} = useRacePresentation(config);
-  const {year, items} = getSmoothLayoutAtFrame(frame, layoutTimeline);
-  const maxValue = Math.max(...items.map((x) => x.value));
+  const {year, items, scaleMax} = getSmoothLayoutAtFrame(frame, layoutTimeline);
   const {theme, assets, title} = config;
 
   return (
@@ -44,7 +43,7 @@ export const BarChartRace: React.FC<BarChartRaceProps> = ({config}) => {
         }}
       >
         {items.map((item) => {
-          const width = (item.value / maxValue) * MAX_BAR_WIDTH;
+          const width = (item.value / scaleMax) * MAX_BAR_WIDTH;
 
           return (
             <BarRow

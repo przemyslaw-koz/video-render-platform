@@ -1,4 +1,5 @@
-import type {DataPoint} from '../types/race-config';
+import type {BarScaleMode, DataPoint} from '../types/race-config';
+import {buildScaleMaxByFrame} from './compute-bar-scale';
 import {
   RANK_HYSTERESIS_THRESHOLD,
   Y_EASING,
@@ -23,6 +24,7 @@ export type BarLayoutItem = {
 export type SmoothLayoutFrame = {
   year: number;
   items: BarLayoutItem[];
+  scaleMax: number;
 };
 
 type RankedFrameStatesOptions = {
@@ -43,6 +45,8 @@ export type SmoothLayoutOptions = RankedFrameStatesOptions & {
     stiffness: number;
     mass: number;
   };
+  barScaleMode?: BarScaleMode;
+  axisHeadroomRatio?: number;
 };
 
 const getUniqueNames = (data: DataPoint[]): string[] => [
@@ -98,6 +102,8 @@ export const buildSmoothLayoutTimeline = ({
   fps,
   springDurationInFrames,
   springConfig,
+  barScaleMode = 'expanding-axis',
+  axisHeadroomRatio,
 }: SmoothLayoutOptions): SmoothLayoutFrame[] => {
   const names = getUniqueNames(data);
   const frameStates = buildRankedFrameStates({
@@ -107,6 +113,15 @@ export const buildSmoothLayoutTimeline = ({
     endYear,
     hysteresisThreshold,
   });
+
+  const frameMaxValues = frameStates.map((state) =>
+    Math.max(0, ...state.items.map((item) => item.value)),
+  );
+  const scaleMaxByFrame = buildScaleMaxByFrame(
+    frameMaxValues,
+    barScaleMode,
+    axisHeadroomRatio,
+  );
 
   const targetYByFrame = frameStates.map((state) => {
     const targetY: Record<string, number> = {};
@@ -134,6 +149,7 @@ export const buildSmoothLayoutTimeline = ({
       ...item,
       y: yByFrame[frame][item.name],
     })),
+    scaleMax: scaleMaxByFrame[frame],
   }));
 };
 

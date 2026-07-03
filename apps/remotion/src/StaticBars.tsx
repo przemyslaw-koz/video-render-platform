@@ -3,6 +3,7 @@ import {AbsoluteFill} from 'remotion';
 import {BarRow} from './components/BarRow';
 import {raceConfig} from './datasets/race-config';
 import {getAssetSrc} from './lib/assets';
+import {buildScaleMaxByFrame} from './lib/compute-bar-scale';
 import {resolveRaceFonts} from './lib/load-race-fonts';
 import {
   getChartHeight,
@@ -22,7 +23,12 @@ export const StaticBars = () => {
   const items = sortByValueWithTieBreak(
     raceConfig.data.filter((d) => d.year === YEAR),
   );
-  const maxValue = Math.max(...items.map((x) => x.value));
+  const frameMax = Math.max(0, ...items.map((x) => x.value));
+  const scaleMax = buildScaleMaxByFrame(
+    [frameMax],
+    raceConfig.barScaleMode ?? 'expanding-axis',
+    raceConfig.axisHeadroomRatio,
+  )[0];
 
   return (
     <AbsoluteFill style={{backgroundColor: theme.background, padding: 80}}>
@@ -45,7 +51,7 @@ export const StaticBars = () => {
       >
         {items.map((item, index) => {
           const rank = index + 1;
-          const width = (item.value / maxValue) * MAX_BAR_WIDTH;
+          const width = (item.value / scaleMax) * MAX_BAR_WIDTH;
 
           return (
             <BarRow

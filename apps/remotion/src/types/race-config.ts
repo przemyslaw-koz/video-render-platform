@@ -64,6 +64,8 @@ export type ResolvedToast = {
   message: string;
 };
 
+export type BarScaleMode = 'leader-relative' | 'expanding-axis';
+
 export type RaceConfig = {
   title: string;
   width: number;
@@ -77,4 +79,8 @@ export type RaceConfig = {
   fonts: RaceFonts;
   assets: Record<string, AssetRef>;
   toasts: ToastDefinition[];
+  /** How to scale bar widths relative to the X axis. Default: expanding-axis */
+  barScaleMode?: BarScaleMode;
+  /** Used only with expanding-axis: max fraction of width for the leader (default 0.95) */
+  axisHeadroomRatio?: number;
 };
