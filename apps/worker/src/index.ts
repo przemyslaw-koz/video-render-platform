@@ -1,80 +1,78 @@
-import { runRemotion } from "./run-remotion.js";
+import { getJob, Job, patchJob, type PatchJobBody } from './orchestrator-client.js';
+import { runRemotion } from './run-remotion.js';
+
+const statusMatrix = {
+  RUNNING: () => ({
+    status: 'RUNNING' as const,
+    startedAt: new Date().toISOString(),
+  }),
+  DONE: () => ({
+    status: 'DONE' as const,
+    finishedAt: new Date().toISOString(),
+  }),
+  FAILED: (errorMessage: string) => ({
+    status: 'FAILED' as const,
+    finishedAt: new Date().toISOString(),
+    errorMessage,
+  }),
+};
+
+type PatchableStatus = keyof typeof statusMatrix;
 
 const jobId = process.argv[2];
-const base = process.env.ORCHESTRATOR_URL ?? 'http://localhost:3000';
 
-if (!jobId) {
-  console.error('Usage: bun src/index.ts <jobId>');
-  process.exit(1);
-}
+const job = await fetchJob(jobId);
 
-const res = await fetch(`${base}/jobs/${jobId}`);
+await setJobStatus(jobId, 'RUNNING');
 
-if (!res.ok) {
-  console.error(`GET /jobs/${jobId} failed: ${res.status}`);
-  console.error(await res.text());
-  process.exit(1);
-}
-
-const job = await res.json();
-console.log("fetched job:", job.jobId);
-console.log(JSON.stringify(job, null, 2));
-
-const payload = {
-  status: 'RUNNING',
-  startedAt: new Date().toISOString()
-}
-
-// patch job status to RUNNING
-const patchRes = await fetch(`${base}/jobs/${jobId}`, {
-  method: 'PATCH',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(payload),
-});
-
-if (!patchRes.ok) {
-  console.error(`PATCH /jobs/${jobId} failed: ${patchRes.status}`);
-  console.error(await patchRes.text());
-  process.exit(1);
-}
-
-const patchedJob = await patchRes.json();
-console.log('patched job:', patchedJob.jobId);
-console.log(JSON.stringify(patchedJob, null, 2));
-
-// run remotion
 console.log('running remotion');
 
 try {
   await runRemotion({
     inputPath: job.inputPath,
     outputPath: job.outputPath,
+    templateId: job.templateId,
   });
 
-  const doneJob = {
-    ...patchedJob,
-    status: 'DONE',
-    finishedAt: new Date().toISOString()
-  };
-  // patch job status to DONE
-  await fetch(`${base}/jobs/${jobId}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(doneJob),
-  });
-  console.log('job done');
+  await setJobStatus(jobId, 'DONE');
 } catch (error) {
   console.error('error running remotion:', error);
 
-  const failedJob = {
-    ...patchedJob,
-    status: 'FAILED',
-    errorMessage: error instanceof Error ? error.message : 'Unknown error',
-  };
-  // patch job status to FAILED
-  await fetch(`${base}/jobs/${jobId}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(failedJob),
-  });
+  try {
+    await setJobStatus(
+      jobId,
+      'FAILED',
+      error instanceof Error ? error.message : 'Unknown error',
+    );
+  } catch (patchError) {
+    console.error('failed to update job status:', patchError);
+  }
+
+  process.exit(1);
+}
+
+async function fetchJob(jobId: string): Promise<Job> {
+  if (!jobId) {
+    console.error('Usage: bun src/index.ts <jobId>');
+    process.exit(1);
+  }
+
+  const job = await getJob(jobId);
+  console.log('fetched job:', JSON.stringify(job, null, 2));
+
+  return job;
+}
+
+async function setJobStatus(
+  jobId: string,
+  status: PatchableStatus,
+  errorMessage?: string,
+) {
+  const body: PatchJobBody =
+    status === 'FAILED'
+      ? statusMatrix.FAILED(errorMessage ?? 'Unknown error')
+      : statusMatrix[status]();
+
+  const patchedJob = await patchJob(jobId, body);
+  console.log('patched job:', JSON.stringify(patchedJob, null, 2));
 }
