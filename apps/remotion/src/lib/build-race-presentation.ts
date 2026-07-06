@@ -19,6 +19,7 @@ export const buildRacePresentation = (config: RaceConfig): RacePresentation => (
     fps: config.fps,
     barScaleMode: config.barScaleMode ?? 'expanding-axis',
     axisHeadroomRatio: config.axisHeadroomRatio,
+    topN: config.topN,
   }),
   fonts: resolveRaceFonts(config.fonts),
   toasts: resolveToasts({

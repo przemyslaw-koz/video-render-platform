@@ -9,6 +9,7 @@ export const ROW_STEP = LABEL_HEIGHT + BAR_HEIGHT + BAR_GAP;
 export const MAX_BAR_WIDTH = 1200;
 export const Y_SMOOTHING = 0.12;
 export const RANK_HYSTERESIS_THRESHOLD = 0.5;
+export const DEFAULT_TOP_N = 10;
 
 export type YEasing = 'lerp' | 'spring';
 export const Y_EASING: YEasing = 'spring';

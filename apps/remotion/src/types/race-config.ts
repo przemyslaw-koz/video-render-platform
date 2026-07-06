@@ -83,4 +83,6 @@ export type RaceConfig = {
   barScaleMode?: BarScaleMode;
   /** Used only with expanding-axis: max fraction of width for the leader (default 0.95) */
   axisHeadroomRatio?: number;
+  /** Max bars shown on screen at once (default 10) */
+  topN?: number;
 };

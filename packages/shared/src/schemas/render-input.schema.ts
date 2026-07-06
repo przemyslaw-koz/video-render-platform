@@ -73,6 +73,7 @@ export const raceConfigSchema = z.object({
   }),
   assets: z.record(z.string(), assetRefSchema),
   toasts: z.array(toastDefinitionSchema),
+  topN: z.number().int().positive().optional(),
 });
 
 export type RaceConfig = z.infer<typeof raceConfigSchema>;
